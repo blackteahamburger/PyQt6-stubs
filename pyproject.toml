@@ -24,6 +24,9 @@ classifiers = [
     "Typing :: Stubs Only",
 ]
 
+[project.urls]
+Homepage = "https://github.com/blackteahamburger/PyQt6-stubs-collection"
+
 [tool.setuptools]
 packages = ["PyQt6-stubs-collection"]
 zip-safe = false
