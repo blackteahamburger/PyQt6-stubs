@@ -9,11 +9,11 @@ from pathlib import Path
 
 from version import PYQT_VERSIONS
 
-SRC_DIR = Path(__file__).parent.joinpath("PyQt6-stubs-collection")
+SRC_DIR = Path(__file__).parent.joinpath("PyQt6-stubs")
 
 
 def download_stubs(download_folder: Path) -> None:
-    """Download the stubs and copy them to PyQt6-stubs-collection/{lib} folder."""
+    """Download the stubs and copy them to PyQt6-stubs/{lib} folder."""
     for lib, version in PYQT_VERSIONS.items():
         print(f"Downloading stubs for {lib}")
         subprocess.check_call([

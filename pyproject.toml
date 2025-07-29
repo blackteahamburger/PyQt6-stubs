@@ -3,7 +3,7 @@ requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "PyQt6-stubs-collection"
+name = "PyQt6-stubs"
 version = "20250730"
 description = "Collections of stubs for the PyQt6 framework and its extensions."
 authors = [
@@ -25,8 +25,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/blackteahamburger/PyQt6-stubs-collection"
+Homepage = "https://github.com/blackteahamburger/PyQt6-stubs"
 
 [tool.setuptools]
-packages = ["PyQt6-stubs-collection"]
+packages = ["PyQt6-stubs"]
 zip-safe = false
