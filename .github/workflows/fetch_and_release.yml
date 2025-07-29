@@ -94,7 +94,7 @@ jobs:
                   continue
               elif not in_versions:
                   new_lines.append(line)
-          version_py.write_text('\n'.join(new_lines), encoding="utf-8")
+          version_py.write_text('\n'.join(new_lines) + '\n', encoding="utf-8")
 
           # Update pyproject.toml version to today's date
           pyproject = Path("pyproject.toml")
