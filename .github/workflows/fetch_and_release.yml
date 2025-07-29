@@ -127,7 +127,7 @@ jobs:
           import json
           latest_versions = json.loads('${{ steps.check_versions.outputs.latest_versions }}')
           with open("release_body.md", "w", encoding="utf-8") as f:
-              f.write("## Updated PyQt6 package versions\n\n")
+              f.write("## Updated PyQt6 package versions:\n\n")
               for lib, ver in latest_versions.items():
                   f.write(f"- **{lib}**: `{ver}`\n")
 
