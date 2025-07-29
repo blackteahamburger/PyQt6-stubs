@@ -1,0 +1,144 @@
+name: Upstream Fetch & Release
+
+on:
+  schedule:
+    - cron: "30 23 28 * *"
+  workflow_dispatch:
+
+jobs:
+  update-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+
+      - name: Check latest PyQt6 package versions
+        id: check_versions
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          import sys
+          import subprocess
+          import re
+          import os
+          import json
+          from version import PYQT_VERSIONS
+
+          outdated = []
+          latest_versions = {}
+
+          for lib, current_version in PYQT_VERSIONS.items():
+              result = subprocess.run(
+                  [sys.executable, "-m", "pip", "index", "versions", lib],
+                  capture_output=True, text=True
+              )
+              match = re.search(r'Available versions: ([\d.,\s]+)', result.stdout)
+              if match:
+                  versions = [v.strip() for v in match.group(1).split(',')]
+                  latest = versions[0]
+                  latest_versions[lib] = latest
+                  if latest > current_version:
+                      outdated.append(lib)
+              else:
+                  latest_versions[lib] = current_version
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+              fh.write(f"outdated={','.join(outdated)}\n")
+              fh.write(f"latest_versions={json.dumps(latest_versions)}\n")
+
+        shell: python
+
+      - name: Decide whether to update
+        id: should_update
+        run: |
+          if [ -z "${{ steps.check_versions.outputs.outdated }}" ]; then
+            echo "no_update=true" >> $GITHUB_OUTPUT
+          else
+            echo "no_update=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update version.py and pyproject.toml
+        if: steps.should_update.outputs.no_update == 'false'
+        id: update_and_release
+        run: |
+          from pathlib import Path
+          import datetime
+          import json
+          import os
+
+          latest_versions = json.loads('${{ steps.check_versions.outputs.latest_versions }}')
+
+          # Update PYQT_VERSIONS in version.py
+          version_py = Path("version.py")
+          lines = version_py.read_text(encoding="utf-8").splitlines()
+          new_lines = []
+          in_versions = False
+          for line in lines:
+              if line.strip().startswith("PYQT_VERSIONS"):
+                  in_versions = True
+                  new_lines.append("PYQT_VERSIONS = {")
+                  for lib, ver in latest_versions.items():
+                      new_lines.append(f'    "{lib}": "{ver}",')
+                  new_lines.append("}")
+              elif in_versions and line.strip().startswith("}"):
+                  in_versions = False
+                  continue
+              elif not in_versions:
+                  new_lines.append(line)
+          version_py.write_text('\n'.join(new_lines), encoding="utf-8")
+
+          # Update pyproject.toml version to today's date
+          pyproject = Path("pyproject.toml")
+          pyproject_text = pyproject.read_text(encoding="utf-8")
+          today = datetime.datetime.now().strftime("%Y%m%d")
+          import re
+          pyproject_text = re.sub(r'version\s*=\s*"\d+"', f'version = "{today}"', pyproject_text)
+          pyproject.write_text(pyproject_text, encoding="utf-8")
+
+          # Set release_tag output for next step
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+              fh.write(f"release_tag={today}\n")
+
+        shell: python
+
+      - name: Fetch latest stubs
+        if: steps.should_update.outputs.no_update == 'false'
+        run: python fetch_upstream.py
+
+      - name: Auto-commit changes
+        if: steps.should_update.outputs.no_update == 'false'
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: update PyQt6 stubs and version info"
+
+      - name: Prepare release body
+        if: steps.should_update.outputs.no_update == 'false'
+        id: release_body
+        run: |
+          import json
+          latest_versions = json.loads('${{ steps.check_versions.outputs.latest_versions }}')
+          with open("release_body.md", "w", encoding="utf-8") as f:
+              f.write("## Updated PyQt6 package versions\n\n")
+              for lib, ver in latest_versions.items():
+                  f.write(f"- **{lib}**: `{ver}`\n")
+
+        shell: python
+
+      - name: Release new version
+        if: steps.should_update.outputs.no_update == 'false'
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit: ${{ github.sha }}
+          tag: ${{ steps.update_and_release.outputs.release_tag }}
+          allowUpdates: true
+          bodyFile: release_body.md
