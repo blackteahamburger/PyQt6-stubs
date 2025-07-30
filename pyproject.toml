@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "PyQt6-stubs"
-version = "20250730"
+version = "20250731"
 description = "Collections of stubs for the PyQt6 framework and its extensions."
 authors = [
     { name = "Blackteahamburger", email = "blackteahamburger@outlook.com" },

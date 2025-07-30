@@ -1,4 +1,4 @@
-name: Upstream Fetch & Release
+name: Generate & Release
 
 on:
   schedule:
@@ -112,7 +112,7 @@ jobs:
 
       - name: Fetch latest stubs
         if: steps.should_update.outputs.no_update == 'false'
-        run: python fetch_upstream.py
+        run: python generate_upstream.py
 
       - name: Auto-commit changes
         if: steps.should_update.outputs.no_update == 'false'
