@@ -1,7 +1,5 @@
 # Copyright (c) 2025 Blackteahamburger <blackteahamburger@outlook.com>
 #
-# Adapted from https://github.com/python-qt-tools/PyQt6-stubs/blob/main/generate_upstream.py
-#
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
 # Foundation, version 3.
