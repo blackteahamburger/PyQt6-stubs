@@ -24,6 +24,9 @@ classifiers = [
     "Typing :: Stubs Only",
 ]
 
+[project.optional-dependencies]
+dev = ["ruff"]
+
 [project.urls]
 Homepage = "https://github.com/blackteahamburger/PyQt6-stubs"
 
