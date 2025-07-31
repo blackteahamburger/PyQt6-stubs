@@ -27,7 +27,7 @@ from pathlib import Path
 from version import PYQT_VERSIONS
 
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("fetch_upstream")
+logger = logging.getLogger("generate_upstream")
 
 SRC_DIR = Path(__file__).parent.joinpath("PyQt6-stubs")
 
