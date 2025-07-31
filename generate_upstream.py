@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+#
 # Copyright (c) 2025 Blackteahamburger <blackteahamburger@outlook.com>
 #
 # Modified from https://github.com/python-qt-tools/PyQt6-stubs/blob/main/generate_upstream.py
