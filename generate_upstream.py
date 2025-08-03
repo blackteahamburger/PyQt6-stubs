@@ -26,10 +26,11 @@ import tempfile
 import zipfile
 from pathlib import Path
 
+import fix
 from version import PYQT_VERSIONS
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("generate_upstream")
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 SRC_DIR = Path(__file__).parent.joinpath("PyQt6-stubs")
 
@@ -66,6 +67,8 @@ def download_stubs(download_folder: Path) -> None:
 
 
 if __name__ == "__main__":
+    logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.INFO)
+
     shutil.rmtree(SRC_DIR, ignore_errors=True)
     SRC_DIR.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory() as temp_dwld_folder:
@@ -73,6 +76,4 @@ if __name__ == "__main__":
 
     # Call the fix script to process the downloaded files
     logger.info("Running fix.py to process the downloaded files")
-    import fix
-
     fix.fix_all()
