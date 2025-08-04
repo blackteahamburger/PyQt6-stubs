@@ -119,6 +119,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: update PyQt6 stubs and version info"
+          tagging_message: ${{ steps.update_and_release.outputs.release_tag }}
 
       - name: Prepare release body
         if: steps.should_update.outputs.no_update == 'false'
