@@ -1,35 +1,35 @@
 [build-system]
-requires = ["setuptools>=77.0.3"]
-build-backend = "setuptools.build_meta"
+    build-backend = "setuptools.build_meta"
+    requires      = ["setuptools>=77.0.3"]
 
 [project]
-name = "PyQt6-stubs"
-version = "20250731"
-description = "Collections of stubs for the PyQt6 framework and its extensions."
-authors = [
-    { name = "Blackteahamburger", email = "blackteahamburger@outlook.com" },
-]
-maintainers = [
-    { name = "Blackteahamburger", email = "blackteahamburger@outlook.com" },
-]
-license = "GPL-3.0"
-license-files = ["LICENSE"]
-readme = "README.md"
-requires-python = ">=3.10"
-classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
-    "Intended Audience :: Developers",
-    "Typing :: Stubs Only",
-]
+    authors = [
+        { name = "Blackteahamburger", email = "blackteahamburger@outlook.com" },
+    ]
+    classifiers = [
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3",
+        "Typing :: Stubs Only",
+    ]
+    description = "Collections of stubs for the PyQt6 framework and its extensions."
+    license = "GPL-3.0"
+    license-files = ["LICENSE"]
+    maintainers = [
+        { name = "Blackteahamburger", email = "blackteahamburger@outlook.com" },
+    ]
+    name = "PyQt6-stubs"
+    readme = "README.md"
+    requires-python = ">=3.10"
+    version = "20250824"
 
-[project.optional-dependencies]
-dev = ["ruff"]
+    [project.optional-dependencies]
+        dev = ["ruff"]
 
-[project.urls]
-Homepage = "https://github.com/blackteahamburger/PyQt6-stubs"
+    [project.urls]
+        Homepage = "https://github.com/blackteahamburger/PyQt6-stubs"
 
 [tool.setuptools]
-packages = ["PyQt6-stubs"]
-zip-safe = false
+    packages = ["PyQt6-stubs"]
+    zip-safe = false

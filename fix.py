@@ -387,14 +387,12 @@ def fix_sip_pyi(content: str) -> str:
 
     """
     # Fix Buffer type definition
-    content = re.sub(
+    return re.sub(
         r"Buffer\s*=\s*Union\[\s*bytes\s*,\s*bytearray\s*,\s*memoryview\s*,\s*'array'\s*,\s*'voidptr'\s*\]",
         "Buffer = Union[bytes, bytearray, memoryview, "
         "'array[typing.Any]', 'voidptr']",
         content,
     )
-    # Replace _T with T
-    return content.replace("_T", "T")
 
 
 def fix_file(path: Path) -> None:
